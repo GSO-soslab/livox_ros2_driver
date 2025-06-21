@@ -29,6 +29,7 @@
 #include <stdint.h>
 
 #include <rclcpp/rclcpp.hpp>
+#include "rclcpp/clock.hpp"
 #include <pcl_conversions/pcl_conversions.h>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <sensor_msgs/msg/imu.hpp>
@@ -215,6 +216,13 @@ uint32_t Lddc::PublishPointcloud2(LidarDataQueue *queue, uint32_t packet_num,
       std::dynamic_pointer_cast<rclcpp::Publisher
       <sensor_msgs::msg::PointCloud2>>(GetCurrentPublisher(handle));
   if (kOutputToRos == output_type_) {
+    //! TEST:
+    rclcpp::Clock clock;
+    cloud.header.stamp = clock.now();
+    // std::cout << "Header timestamp: "
+    //         << cloud.header.stamp.sec << "s "
+    //         << cloud.header.stamp.nanosec << "ns" << std::endl;
+
     publisher->publish(cloud);
   } else {
 #if 0    
